@@ -19,5 +19,5 @@ if __name__ == "__main__":
     print("Sleeping for 3 seconds")
     sleep(3)
 
-    print("Stopping logger in main")
-    logger_singleton.stop_logger()
+    for num in range(0, 10000):
+        logger_singleton.log_message(f"{str(num)}")
