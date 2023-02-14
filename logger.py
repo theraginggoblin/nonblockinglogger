@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import atexit
 import threading
 import queue
 import sys
@@ -39,12 +40,11 @@ class ThreadLogger(LoggerBase):
             message = self._queue.get()
             if message:
                 if message == EXIT_MESSAGE:
-                    print("Really exiting")
                     break
                 self._process_message(message)
 
     def start_logger(self):
-        self._thread = threading.Thread(target=self._process_queue)
+        self._thread = threading.Thread(target=self._process_queue, daemon=True)
         self._thread.start()
 
     def stop_logger(self):
@@ -68,9 +68,15 @@ class ThreadLoggerFactory(LoggerFactoryBase):
 logger_singleton = ThreadLoggerFactory().get_logger()
 logger_singleton.start_logger()
 
-def exception_handler(exception_type, value, traceback):
+def exeption_handler(exception_type, value, traceback):
     print("stopping logger in exception handler")
     logger_singleton.stop_logger()
     sys.__excepthook__(exception_type, value, traceback)
 
-sys.excepthook = exception_handler
+sys.excepthook = exeption_handler
+
+def atexit_handler():
+    print("stopping logger in atexit handler")
+    logger_singleton.stop_logger()
+
+atexit.register(atexit_handler)
