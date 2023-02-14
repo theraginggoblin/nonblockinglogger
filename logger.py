@@ -68,9 +68,9 @@ class ThreadLoggerFactory(LoggerFactoryBase):
 logger_singleton = ThreadLoggerFactory().get_logger()
 logger_singleton.start_logger()
 
-def exeption_handler(exception_type, value, traceback):
+def exception_handler(exception_type, value, traceback):
     print("stopping logger in exception handler")
     logger_singleton.stop_logger()
     sys.__excepthook__(exception_type, value, traceback)
 
-sys.excepthook = exeption_handler
+sys.excepthook = exception_handler
