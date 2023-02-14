@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import atexit
 import threading
 import queue
-import sys
+#import sys
 
 EXIT_MESSAGE = "EXIT"
 
@@ -68,12 +68,12 @@ class ThreadLoggerFactory(LoggerFactoryBase):
 logger_singleton = ThreadLoggerFactory().get_logger()
 logger_singleton.start_logger()
 
-def exeption_handler(exception_type, value, traceback):
-    print("stopping logger in exception handler")
-    logger_singleton.stop_logger()
-    sys.__excepthook__(exception_type, value, traceback)
+# def exeption_handler(exception_type, value, traceback):
+#     print("stopping logger in exception handler")
+#     logger_singleton.stop_logger()
+#     sys.__excepthook__(exception_type, value, traceback)
 
-sys.excepthook = exeption_handler
+# sys.excepthook = exeption_handler
 
 def atexit_handler():
     print("stopping logger in atexit handler")
